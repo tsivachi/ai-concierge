@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "concierge-api",
+      "runtimeExecutable": "/Users/thaniga/projects/ai-concierge/.venv/bin/uvicorn",
+      "runtimeArgs": ["apps.api.main:app", "--host", "0.0.0.0", "--port", "8000"],
+      "port": 8000
+    },
+    {
+      "name": "concierge-web",
+      "runtimeExecutable": "/opt/anaconda3/bin/npm",
+      "runtimeArgs": ["--prefix", "/Users/thaniga/projects/ai-concierge/apps/web", "run", "dev", "--", "--host", "0.0.0.0", "--port", "5173"],
+      "port": 5173
+    }
+  ]
+}

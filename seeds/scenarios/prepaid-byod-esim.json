@@ -1,0 +1,24 @@
+{
+  "scenario_id": "prepaid-byod-esim",
+  "title": "New prepaid BYOD + eSIM",
+  "description": "Single prepaid bring-your-own-device line activating via eSIM, no number port.",
+  "account": { "account_id": "acct-prepaid-byod", "customer_id": "cust-prepaid-byod" },
+  "lines": [
+    { "line_id": "line-prepaid-byod-1", "plan_type": "PREPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 0,
+  "events": [
+    {
+      "event_id": "seed-pb-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-prepaid-byod",
+      "account_id": "acct-prepaid-byod",
+      "line_id": "line-prepaid-byod-1",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-pb-1",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-prepaid-byod": { "opted_out": false } }
+}

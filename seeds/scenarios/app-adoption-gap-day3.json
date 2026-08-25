@@ -1,0 +1,57 @@
+{
+  "scenario_id": "app-adoption-gap-day3",
+  "title": "App adoption gap after day 3",
+  "description": "A prepaid line past the day-3 app-gap threshold, activation already complete, app not downloaded.",
+  "account": { "account_id": "acct-app-gap", "customer_id": "cust-app-gap" },
+  "lines": [
+    { "line_id": "line-app-gap-1", "plan_type": "PREPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 4,
+  "events": [
+    {
+      "event_id": "seed-ag-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-app-gap",
+      "account_id": "acct-app-gap",
+      "line_id": "line-app-gap-1",
+      "occurred_at_offset_days": 4,
+      "source": "seed",
+      "correlation_id": "seed-corr-ag-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ag-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-app-gap",
+      "account_id": "acct-app-gap",
+      "line_id": "line-app-gap-1",
+      "occurred_at_offset_days": 4,
+      "source": "seed",
+      "correlation_id": "seed-corr-ag-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ag-3",
+      "event_type": "DeviceActivationCompleted",
+      "customer_id": "cust-app-gap",
+      "account_id": "acct-app-gap",
+      "line_id": "line-app-gap-1",
+      "occurred_at_offset_days": 4,
+      "source": "seed",
+      "correlation_id": "seed-corr-ag-3",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ag-4",
+      "event_type": "CustomerLoggedIn",
+      "customer_id": "cust-app-gap",
+      "account_id": "acct-app-gap",
+      "line_id": "line-app-gap-1",
+      "occurred_at_offset_days": 4,
+      "source": "seed",
+      "correlation_id": "seed-corr-ag-4",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-app-gap": { "opted_out": false } }
+}

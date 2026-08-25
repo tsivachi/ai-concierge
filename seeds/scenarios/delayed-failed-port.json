@@ -1,0 +1,46 @@
+{
+  "scenario_id": "delayed-failed-port",
+  "title": "Delayed/failed number transfer",
+  "description": "A postpaid line whose number port has been pending too long.",
+  "account": { "account_id": "acct-delayed-port", "customer_id": "cust-delayed-port" },
+  "lines": [
+    { "line_id": "line-delayed-port-1", "plan_type": "POSTPAID", "number_port_requested": true }
+  ],
+  "journey_started_at_offset_days": 3,
+  "events": [
+    {
+      "event_id": "seed-dp-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-delayed-port",
+      "account_id": "acct-delayed-port",
+      "line_id": "line-delayed-port-1",
+      "occurred_at_offset_days": 3,
+      "source": "seed",
+      "correlation_id": "seed-corr-dp-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-dp-2",
+      "event_type": "NumberTransferRequested",
+      "customer_id": "cust-delayed-port",
+      "account_id": "acct-delayed-port",
+      "line_id": "line-delayed-port-1",
+      "occurred_at_offset_days": 3,
+      "source": "seed",
+      "correlation_id": "seed-corr-dp-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-dp-3",
+      "event_type": "NumberTransferPending",
+      "customer_id": "cust-delayed-port",
+      "account_id": "acct-delayed-port",
+      "line_id": "line-delayed-port-1",
+      "occurred_at_offset_days": 3,
+      "source": "seed",
+      "correlation_id": "seed-corr-dp-3",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-delayed-port": { "opted_out": false } }
+}

@@ -1,0 +1,46 @@
+{
+  "scenario_id": "customer-opt-out",
+  "title": "Customer opt-out",
+  "description": "A postpaid line with open recommended-activity gaps whose customer has opted out of proactive contact.",
+  "account": { "account_id": "acct-opt-out", "customer_id": "cust-opt-out" },
+  "lines": [
+    { "line_id": "line-opt-out-1", "plan_type": "POSTPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 8,
+  "events": [
+    {
+      "event_id": "seed-oo-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-opt-out",
+      "account_id": "acct-opt-out",
+      "line_id": "line-opt-out-1",
+      "occurred_at_offset_days": 8,
+      "source": "seed",
+      "correlation_id": "seed-corr-oo-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-oo-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-opt-out",
+      "account_id": "acct-opt-out",
+      "line_id": "line-opt-out-1",
+      "occurred_at_offset_days": 8,
+      "source": "seed",
+      "correlation_id": "seed-corr-oo-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-oo-3",
+      "event_type": "DeviceActivationCompleted",
+      "customer_id": "cust-opt-out",
+      "account_id": "acct-opt-out",
+      "line_id": "line-opt-out-1",
+      "occurred_at_offset_days": 8,
+      "source": "seed",
+      "correlation_id": "seed-corr-oo-3",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-opt-out": { "opted_out": true } }
+}

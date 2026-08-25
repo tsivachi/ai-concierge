@@ -1,0 +1,58 @@
+{
+  "scenario_id": "multi-line-postpaid",
+  "title": "Multi-line postpaid account",
+  "description": "Two postpaid lines on one account journey; line 1 is further along than line 2.",
+  "account": { "account_id": "acct-multiline", "customer_id": "cust-multiline" },
+  "lines": [
+    { "line_id": "line-multiline-1", "plan_type": "POSTPAID", "number_port_requested": false },
+    { "line_id": "line-multiline-2", "plan_type": "POSTPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 0,
+  "events": [
+    {
+      "event_id": "seed-ml-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-multiline",
+      "account_id": "acct-multiline",
+      "line_id": "line-multiline-1",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-ml-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ml-2",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-multiline",
+      "account_id": "acct-multiline",
+      "line_id": "line-multiline-2",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-ml-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ml-3",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-multiline",
+      "account_id": "acct-multiline",
+      "line_id": "line-multiline-1",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-ml-3",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ml-4",
+      "event_type": "DeviceActivationCompleted",
+      "customer_id": "cust-multiline",
+      "account_id": "acct-multiline",
+      "line_id": "line-multiline-1",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-ml-4",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-multiline": { "opted_out": false } }
+}

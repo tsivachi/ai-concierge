@@ -1,0 +1,35 @@
+{
+  "scenario_id": "contextual-troubleshooting",
+  "title": "Contextual AI troubleshooting",
+  "description": "An authenticated customer with a known journey state, mid-onboarding, with an open next best action to ask the concierge about.",
+  "account": { "account_id": "acct-troubleshooting", "customer_id": "cust-troubleshooting" },
+  "lines": [
+    { "line_id": "line-troubleshooting-1", "plan_type": "POSTPAID", "number_port_requested": true }
+  ],
+  "journey_started_at_offset_days": 2,
+  "events": [
+    {
+      "event_id": "seed-ct-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-troubleshooting",
+      "account_id": "acct-troubleshooting",
+      "line_id": "line-troubleshooting-1",
+      "occurred_at_offset_days": 2,
+      "source": "seed",
+      "correlation_id": "seed-corr-ct-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-ct-2",
+      "event_type": "NumberTransferRequested",
+      "customer_id": "cust-troubleshooting",
+      "account_id": "acct-troubleshooting",
+      "line_id": "line-troubleshooting-1",
+      "occurred_at_offset_days": 2,
+      "source": "seed",
+      "correlation_id": "seed-corr-ct-2",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-troubleshooting": { "opted_out": false } }
+}

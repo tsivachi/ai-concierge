@@ -1,0 +1,28 @@
+.claude/settings.local.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+dist/
+build/
+
+# Node / frontend
+node_modules/
+apps/web/dist/
+apps/web/.vite/
+
+# Local data
+*.db
+*.sqlite3
+chroma_data/
+.env
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp

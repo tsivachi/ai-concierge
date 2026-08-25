@@ -1,0 +1,470 @@
+openapi: 3.0.3
+info:
+  title: 30-Day Personalized AI Concierge API
+  version: "0.1.0"
+  description: >
+    Design-time contract for the hackathon MVP. FastAPI generates the
+    authoritative live OpenAPI document at runtime from this same shape;
+    this file exists so /speckit.tasks can derive concrete implementation
+    and contract-test tasks from it.
+servers:
+  - url: http://localhost:8000
+security:
+  - bearerAuth: []
+  - {}   # unauthenticated access is allowed for the routes that declare it explicitly
+
+paths:
+  /api/auth/login:
+    post:
+      summary: Demo-only login (mock auth, not production IAM)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [customer_id]
+              properties:
+                customer_id: { type: string }
+      responses:
+        "200":
+          description: Session token issued
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token: { type: string }
+                  customer_id: { type: string }
+        "404":
+          description: Unknown seeded customer_id
+
+  /api/events:
+    post:
+      summary: Ingest a domain event (idempotent by event_id)
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: "#/components/schemas/DomainEvent" }
+      responses:
+        "202":
+          description: >
+            Accepted. Returns whether the event was newly applied, was a
+            duplicate no-op (FR-008), or was dead-lettered for an unknown
+            account/line (FR-009a).
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  event_id: { type: string }
+                  outcome: { type: string, enum: [applied, duplicate, dead_lettered] }
+        "400":
+          description: Malformed event (missing required correlation fields)
+
+  /api/demo/scenarios:
+    get:
+      summary: List curated demo scenarios
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/DemoScenarioSummary" }
+
+  /api/demo/scenarios/{id}/reset:
+    post:
+      summary: Reset and reload a curated demo scenario (SC-011)
+      security: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Scenario reloaded
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DemoScenarioSummary" }
+        "404":
+          description: Unknown scenario id
+
+  /api/journeys/{journey_id}:
+    get:
+      summary: Get account journey and per-line activity state (FR-033)
+      parameters:
+        - name: journey_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/AccountJourneyView" }
+        "401":
+          description: Authenticated context required (FR-021)
+        "403":
+          description: Authenticated customer does not own this journey
+        "404":
+          description: No such journey
+
+  /api/journeys/{journey_id}/recommendation:
+    get:
+      summary: Current next-best-action(s), one per line (FR-010, Clarifications Q2)
+      parameters:
+        - name: journey_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/NextBestAction" }
+        "401": { description: Authenticated context required }
+        "403": { description: Authenticated customer does not own this journey }
+
+  /api/journeys/{journey_id}/health:
+    get:
+      summary: Current health score(s) with reason codes (FR-016..018)
+      parameters:
+        - name: journey_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  account: { $ref: "#/components/schemas/HealthScore" }
+                  lines:
+                    type: array
+                    items: { $ref: "#/components/schemas/HealthScore" }
+        "401": { description: Authenticated context required }
+        "403": { description: Authenticated customer does not own this journey }
+
+  /api/journeys/{journey_id}/billing:
+    get:
+      summary: Postpaid bill estimate or prepaid renewal readiness (FR-025, FR-026)
+      parameters:
+        - name: journey_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: line_id
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/BillingOrRenewalView" }
+        "401": { description: Authenticated context required }
+        "403": { description: Authenticated customer does not own this journey }
+
+  /api/chat:
+    post:
+      summary: >
+        Concierge chat. Unauthenticated requests receive only generic,
+        knowledge-grounded answers (FR-020); authenticated requests receive
+        context-grounded answers assembled from the customer's actual state
+        (FR-021..024).
+      security:
+        - bearerAuth: []
+        - {}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [session_id, message]
+              properties:
+                session_id: { type: string }
+                message: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/ChatResponse" }
+
+  /api/escalations:
+    post:
+      summary: Explicitly trigger escalation (e.g., "talk to a human") (FR-027)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [journey_id, reason]
+              properties:
+                journey_id: { type: string }
+                line_id: { type: string, nullable: true }
+                reason: { $ref: "#/components/schemas/EscalationReason" }
+                session_id: { type: string, nullable: true }
+      responses:
+        "201":
+          description: Escalation case created
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EscalationCase" }
+        "401": { description: Authenticated context required }
+    get:
+      summary: Retrieve an escalation case
+      parameters:
+        - name: case_id
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/EscalationCase" }
+        "401": { description: Authenticated context required }
+
+  /api/dashboard:
+    get:
+      summary: Aggregate outcome dashboard (FR-035) — POCR/PORR figures always labeled simulated
+      security: []
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema: { $ref: "#/components/schemas/DashboardView" }
+
+  /api/knowledge/search:
+    get:
+      summary: RAG search over the curated knowledge base (FR-020)
+      security: []
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "#/components/schemas/KnowledgeSearchResult" }
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: Opaque demo session token from /api/auth/login (see research.md §5)
+
+  schemas:
+    DomainEvent:
+      type: object
+      required: [event_id, event_type, customer_id, account_id, occurred_at, source, correlation_id]
+      properties:
+        event_id: { type: string }
+        event_type:
+          type: string
+          enum: [OrderCompleted, DeviceDelivered, DeviceActivationStarted, DeviceActivationCompleted,
+                 DeviceActivationFailed, NumberTransferRequested, NumberTransferPending,
+                 NumberTransferCompleted, NumberTransferFailed, CustomerLoggedIn, MobileAppDownloaded,
+                 VoicemailConfigured, AutoPayEnabled, AutoRechargeEnabled, HelpArticleViewed,
+                 SetupAbandoned, ChatStarted, SupportCaseCreated]
+        customer_id: { type: string }
+        account_id: { type: string }
+        line_id: { type: string, nullable: true }
+        journey_id: { type: string, nullable: true }
+        occurred_at: { type: string, format: date-time }
+        source: { type: string }
+        correlation_id: { type: string }
+        attributes: { type: object, additionalProperties: true }
+
+    ActivityInstance:
+      type: object
+      properties:
+        activity_code: { type: string }
+        scope: { type: string, enum: [ACCOUNT, LINE] }
+        requirement_class: { type: string, enum: [REQUIRED, RECOMMENDED, OPTIONAL] }
+        status: { type: string, enum: [NOT_STARTED, IN_PROGRESS, COMPLETED, FAILED, NOT_APPLICABLE] }
+        updated_at: { type: string, format: date-time }
+
+    LineOnboardingState:
+      type: object
+      properties:
+        line_id: { type: string }
+        plan_type: { type: string, enum: [POSTPAID, PREPAID] }
+        status: { type: string, enum: [IN_PROGRESS, COMPLETE] }
+        activities:
+          type: array
+          items: { $ref: "#/components/schemas/ActivityInstance" }
+
+    AccountJourneyView:
+      type: object
+      properties:
+        journey_id: { type: string }
+        account_id: { type: string }
+        status: { type: string, enum: [ACTIVE, COMPLETE, EXPIRED] }
+        started_at: { type: string, format: date-time }
+        expires_at: { type: string, format: date-time }
+        current_day: { type: integer }
+        account_activities:
+          type: array
+          items: { $ref: "#/components/schemas/ActivityInstance" }
+        lines:
+          type: array
+          items: { $ref: "#/components/schemas/LineOnboardingState" }
+
+    ReasonCode:
+      type: object
+      required: [code, label]
+      properties:
+        code: { type: string }
+        label: { type: string }
+        deduction: { type: integer, nullable: true }
+
+    NextBestAction:
+      type: object
+      properties:
+        line_id: { type: string }
+        action_code: { type: string }
+        priority: { type: integer }
+        tie_break_rank: { type: integer }
+        reason_codes:
+          type: array
+          items: { $ref: "#/components/schemas/ReasonCode" }
+        message: { type: string, nullable: true }
+        computed_at: { type: string, format: date-time }
+
+    HealthScore:
+      type: object
+      properties:
+        scope: { type: string, enum: [ACCOUNT, LINE] }
+        line_id: { type: string, nullable: true }
+        score: { type: integer, minimum: 0, maximum: 100 }
+        band: { type: string, enum: [GREEN, YELLOW, RED] }
+        reason_codes:
+          type: array
+          items: { $ref: "#/components/schemas/ReasonCode" }
+
+    BillingOrRenewalView:
+      type: object
+      properties:
+        plan_type: { type: string, enum: [POSTPAID, PREPAID] }
+        postpaid_estimate:
+          type: object
+          nullable: true
+          properties:
+            recurring_charges: { type: number }
+            one_time_charges: { type: number }
+            device_installment: { type: number }
+            taxes_fees: { type: number }
+            promotional_credits: { type: number }
+            cycle_start: { type: string, format: date }
+            cycle_end: { type: string, format: date }
+            estimate_note: { type: string, description: "Explicitly distinguishes this from a final bill amount" }
+        prepaid_renewal:
+          type: object
+          nullable: true
+          properties:
+            balance: { type: number }
+            renewal_date: { type: string, format: date }
+            data_allowance: { type: string }
+            auto_recharge_enabled: { type: boolean }
+            expiration_date: { type: string, format: date, nullable: true }
+            renewal_ready: { type: boolean }
+        explanation: { type: string, description: "LLM-generated explanation of the above, computed fields only" }
+
+    KnowledgeSourceRef:
+      type: object
+      properties:
+        doc_id: { type: string }
+        title: { type: string }
+        topic: { type: string }
+
+    ChatResponse:
+      type: object
+      properties:
+        session_id: { type: string }
+        authenticated: { type: boolean }
+        answer: { type: string }
+        sources:
+          type: array
+          items: { $ref: "#/components/schemas/KnowledgeSourceRef" }
+        escalated: { type: boolean }
+        escalation_case_id: { type: string, nullable: true }
+
+    EscalationReason:
+      type: string
+      enum: [EXPLICIT_REQUEST, UNSUPPORTED_LOW_CONFIDENCE, TWO_FAILED_TROUBLESHOOTING,
+             UNRESOLVED_ACTIVATION_OR_PORT, BILLING_DISPUTE, SENSITIVE_ACCOUNT_SECURITY]
+
+    EscalationCase:
+      type: object
+      properties:
+        case_id: { type: string }
+        journey_id: { type: string }
+        line_id: { type: string, nullable: true }
+        reason: { $ref: "#/components/schemas/EscalationReason" }
+        priority: { type: integer }
+        journey_snapshot: { type: object, additionalProperties: true }
+        relevant_event_ids: { type: array, items: { type: string } }
+        attempted_action_ids: { type: array, items: { type: string } }
+        conversation_summary: { type: string, nullable: true }
+        status: { type: string, enum: [OPEN, RESOLVED, CLOSED] }
+        created_at: { type: string, format: date-time }
+
+    DashboardView:
+      type: object
+      properties:
+        simulated: { type: boolean, enum: [true], description: "Always true; UI must render the simulated/projected label" }
+        enrolled_customers: { type: integer }
+        engagement:
+          type: object
+          properties:
+            proactive_contacts_delivered: { type: integer }
+            chat_sessions: { type: integer }
+        onboarding_completion_rate: { type: number }
+        digital_resolutions: { type: integer }
+        escalations: { type: integer }
+        potential_pocr_interventions: { type: integer }
+        potential_porr_interventions: { type: integer }
+        label: { type: string, description: "Human-readable simulated/projected disclaimer for direct UI rendering" }
+
+    DemoScenarioSummary:
+      type: object
+      properties:
+        scenario_id: { type: string }
+        title: { type: string }
+        description: { type: string }
+
+    KnowledgeSearchResult:
+      type: object
+      properties:
+        doc_id: { type: string }
+        title: { type: string }
+        topic: { type: string }
+        snippet: { type: string }
+        score: { type: number }

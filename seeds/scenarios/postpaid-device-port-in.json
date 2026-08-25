@@ -1,0 +1,24 @@
+{
+  "scenario_id": "postpaid-device-port-in",
+  "title": "New postpaid device + port-in",
+  "description": "Single postpaid line with a number port request, freshly enrolled.",
+  "account": { "account_id": "acct-postpaid-port-in", "customer_id": "cust-postpaid-port-in" },
+  "lines": [
+    { "line_id": "line-postpaid-port-in-1", "plan_type": "POSTPAID", "number_port_requested": true }
+  ],
+  "journey_started_at_offset_days": 0,
+  "events": [
+    {
+      "event_id": "seed-ppi-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-postpaid-port-in",
+      "account_id": "acct-postpaid-port-in",
+      "line_id": "line-postpaid-port-in-1",
+      "occurred_at_offset_days": 0,
+      "source": "seed",
+      "correlation_id": "seed-corr-ppi-1",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-postpaid-port-in": { "opted_out": false } }
+}

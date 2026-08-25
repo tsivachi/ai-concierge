@@ -1,0 +1,66 @@
+{
+  "scenario_id": "prepaid-renewal-approaching",
+  "title": "Prepaid renewal approaching",
+  "description": "A prepaid line whose plan renewal date is coming up soon.",
+  "account": { "account_id": "acct-renewal", "customer_id": "cust-renewal" },
+  "lines": [
+    { "line_id": "line-renewal-1", "plan_type": "PREPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 23,
+  "events": [
+    {
+      "event_id": "seed-rn-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-renewal",
+      "account_id": "acct-renewal",
+      "line_id": "line-renewal-1",
+      "occurred_at_offset_days": 23,
+      "source": "seed",
+      "correlation_id": "seed-corr-rn-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-rn-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-renewal",
+      "account_id": "acct-renewal",
+      "line_id": "line-renewal-1",
+      "occurred_at_offset_days": 23,
+      "source": "seed",
+      "correlation_id": "seed-corr-rn-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-rn-3",
+      "event_type": "DeviceActivationCompleted",
+      "customer_id": "cust-renewal",
+      "account_id": "acct-renewal",
+      "line_id": "line-renewal-1",
+      "occurred_at_offset_days": 23,
+      "source": "seed",
+      "correlation_id": "seed-corr-rn-3",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-rn-4",
+      "event_type": "CustomerLoggedIn",
+      "customer_id": "cust-renewal",
+      "account_id": "acct-renewal",
+      "line_id": "line-renewal-1",
+      "occurred_at_offset_days": 23,
+      "source": "seed",
+      "correlation_id": "seed-corr-rn-4",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-renewal": { "opted_out": false } },
+  "renewal_snapshot": {
+    "line_id": "line-renewal-1",
+    "balance": 12.5,
+    "renewal_date_offset_days": -3,
+    "data_allowance": "5GB",
+    "auto_recharge_enabled": false,
+    "expiration_date_offset_days": null,
+    "add_ons": []
+  }
+}

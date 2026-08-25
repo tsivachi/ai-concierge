@@ -1,0 +1,203 @@
+.app-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: var(--space-lg);
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.app-header nav button {
+  margin-left: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  cursor: pointer;
+}
+
+.app-header nav button.nav-active {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+  border-color: var(--color-primary);
+}
+
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  margin-bottom: var(--space-md);
+  box-shadow: var(--shadow-card);
+}
+
+.journey-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-md);
+}
+
+.scenario-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-sm);
+}
+
+.scenario-list button {
+  width: 100%;
+  text-align: left;
+  padding: var(--space-sm);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.activity-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.activity-row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  padding: 4px 0;
+  border-bottom: 1px solid var(--color-border);
+  font-size: var(--font-size-sm);
+}
+
+.activity-row.status-completed .activity-status {
+  color: var(--color-health-green);
+}
+.activity-row.status-failed .activity-status {
+  color: var(--color-health-red);
+}
+.activity-row.status-in_progress .activity-status {
+  color: var(--color-health-yellow);
+}
+
+.health-account,
+.health-line {
+  border-left: 4px solid;
+  padding: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.reason-codes {
+  margin: var(--space-xs) 0 0;
+  padding-left: 1.1em;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}
+
+.nba-item {
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.nba-priority {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.error {
+  color: var(--color-health-red);
+}
+
+.status-line {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.chat-thread {
+  max-height: 360px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin: var(--space-sm) 0;
+}
+
+.chat-turn {
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  max-width: 80%;
+}
+
+.chat-turn-user {
+  align-self: flex-end;
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+.chat-turn-concierge {
+  align-self: flex-start;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+}
+
+.chat-sources {
+  margin: var(--space-xs) 0 0;
+  font-size: var(--font-size-sm);
+  opacity: 0.8;
+}
+
+.escalated-badge {
+  font-weight: 600;
+  color: var(--color-health-red);
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-md);
+}
+
+.kpi-tile {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.kpi-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
+}
+
+.kpi-label {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+}
+
+.kpi-tile-simulated {
+  border: 2px dashed var(--color-primary);
+}
+
+.kpi-simulated-badge {
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.kpi-disclaimer {
+  grid-column: 1 / -1;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+}

@@ -1,0 +1,67 @@
+{
+  "scenario_id": "postpaid-first-bill-day21",
+  "title": "Postpaid day-21 first-bill education",
+  "description": "A postpaid line at day 21, activation complete, approaching its first bill.",
+  "account": { "account_id": "acct-first-bill", "customer_id": "cust-first-bill" },
+  "lines": [
+    { "line_id": "line-first-bill-1", "plan_type": "POSTPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 21,
+  "events": [
+    {
+      "event_id": "seed-fb-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-first-bill",
+      "account_id": "acct-first-bill",
+      "line_id": "line-first-bill-1",
+      "occurred_at_offset_days": 21,
+      "source": "seed",
+      "correlation_id": "seed-corr-fb-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-fb-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-first-bill",
+      "account_id": "acct-first-bill",
+      "line_id": "line-first-bill-1",
+      "occurred_at_offset_days": 21,
+      "source": "seed",
+      "correlation_id": "seed-corr-fb-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-fb-3",
+      "event_type": "DeviceActivationCompleted",
+      "customer_id": "cust-first-bill",
+      "account_id": "acct-first-bill",
+      "line_id": "line-first-bill-1",
+      "occurred_at_offset_days": 21,
+      "source": "seed",
+      "correlation_id": "seed-corr-fb-3",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-fb-4",
+      "event_type": "CustomerLoggedIn",
+      "customer_id": "cust-first-bill",
+      "account_id": "acct-first-bill",
+      "line_id": "line-first-bill-1",
+      "occurred_at_offset_days": 21,
+      "source": "seed",
+      "correlation_id": "seed-corr-fb-4",
+      "attributes": {}
+    }
+  ],
+  "consent": { "cust-first-bill": { "opted_out": false } },
+  "billing_snapshot": {
+    "line_id": "line-first-bill-1",
+    "recurring_charges": 65.0,
+    "one_time_charges": 35.0,
+    "device_installment": 25.0,
+    "taxes_fees": 8.5,
+    "promotional_credits": -10.0,
+    "cycle_start_offset_days": 21,
+    "cycle_end_offset_days": -9
+  }
+}

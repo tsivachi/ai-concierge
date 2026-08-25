@@ -1,0 +1,68 @@
+{
+  "scenario_id": "repeated-activation-failure",
+  "title": "Repeated activation failure",
+  "description": "A postpaid line whose device activation has failed twice in a row.",
+  "account": { "account_id": "acct-repeated-failure", "customer_id": "cust-repeated-failure" },
+  "lines": [
+    { "line_id": "line-repeated-failure-1", "plan_type": "POSTPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 1,
+  "events": [
+    {
+      "event_id": "seed-raf-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-repeated-failure",
+      "account_id": "acct-repeated-failure",
+      "line_id": "line-repeated-failure-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-raf-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-raf-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-repeated-failure",
+      "account_id": "acct-repeated-failure",
+      "line_id": "line-repeated-failure-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-raf-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-raf-3",
+      "event_type": "DeviceActivationFailed",
+      "customer_id": "cust-repeated-failure",
+      "account_id": "acct-repeated-failure",
+      "line_id": "line-repeated-failure-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-raf-3",
+      "attributes": { "attempt": 1 }
+    },
+    {
+      "event_id": "seed-raf-4",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-repeated-failure",
+      "account_id": "acct-repeated-failure",
+      "line_id": "line-repeated-failure-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-raf-4",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-raf-5",
+      "event_type": "DeviceActivationFailed",
+      "customer_id": "cust-repeated-failure",
+      "account_id": "acct-repeated-failure",
+      "line_id": "line-repeated-failure-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-raf-5",
+      "attributes": { "attempt": 2 }
+    }
+  ],
+  "consent": { "cust-repeated-failure": { "opted_out": false } }
+}

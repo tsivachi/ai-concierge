@@ -1,0 +1,57 @@
+{
+  "scenario_id": "human-escalation-with-context",
+  "title": "Human escalation with context",
+  "description": "A postpaid line with an unresolved activation failure past the escalation threshold.",
+  "account": { "account_id": "acct-escalation", "customer_id": "cust-escalation" },
+  "lines": [
+    { "line_id": "line-escalation-1", "plan_type": "POSTPAID", "number_port_requested": false }
+  ],
+  "journey_started_at_offset_days": 1,
+  "events": [
+    {
+      "event_id": "seed-esc-1",
+      "event_type": "OrderCompleted",
+      "customer_id": "cust-escalation",
+      "account_id": "acct-escalation",
+      "line_id": "line-escalation-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-esc-1",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-esc-2",
+      "event_type": "DeviceActivationStarted",
+      "customer_id": "cust-escalation",
+      "account_id": "acct-escalation",
+      "line_id": "line-escalation-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-esc-2",
+      "attributes": {}
+    },
+    {
+      "event_id": "seed-esc-3",
+      "event_type": "DeviceActivationFailed",
+      "customer_id": "cust-escalation",
+      "account_id": "acct-escalation",
+      "line_id": "line-escalation-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-esc-3",
+      "attributes": { "attempt": 1 }
+    },
+    {
+      "event_id": "seed-esc-4",
+      "event_type": "SupportCaseCreated",
+      "customer_id": "cust-escalation",
+      "account_id": "acct-escalation",
+      "line_id": "line-escalation-1",
+      "occurred_at_offset_days": 1,
+      "source": "seed",
+      "correlation_id": "seed-corr-esc-4",
+      "attributes": { "note": "unresolved activation failure, escalation-eligible" }
+    }
+  ],
+  "consent": { "cust-escalation": { "opted_out": false } }
+}

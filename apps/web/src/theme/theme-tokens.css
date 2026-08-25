@@ -1,0 +1,46 @@
+/*
+  Brand-swappable design tokens. Components must reference these CSS custom
+  properties (var(--token-name)) and never hard-code colors/spacing/type —
+  a later brand pass only needs to override this file's :root block.
+*/
+:root {
+  /* Color */
+  --color-bg: #ffffff;
+  --color-surface: #f6f7f9;
+  --color-border: #e2e5ea;
+  --color-text: #1a1d23;
+  --color-text-muted: #6b7280;
+  --color-primary: #2f5ce0;
+  --color-primary-contrast: #ffffff;
+
+  /* Health bands */
+  --color-health-green: #1a8a4a;
+  --color-health-yellow: #b8860b;
+  --color-health-red: #c22b2b;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Typography */
+  --font-family-base: system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.25rem;
+  --font-size-xl: 1.75rem;
+
+  /* Radius / elevation */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-family-base);
+}
